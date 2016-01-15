@@ -1,0 +1,36 @@
+.row
+  .col-sm-6
+    = f.label :name, 'Name*'
+    = f.text_field :name, :required => true
+  .col-sm-6
+    - size = params[:type] == 'Spree::Banner::Homepage' ? '960x330' : '960x95'
+    = f.label :attachment, "Attachment* (#{size})"
+    = f.file_field :attachment, onchange: 'Attachment.UpdatePreview(this)', required: f.object.new_record?
+%br/
+.row
+  .col-sm-6
+    %label{:for => ""} Preview
+    - image_url = f.object.attachment.url rescue "http://www.parentcenterhub.org/wp-content/uploads/2014/03/No-Image-.jpg"
+    = image_tag image_url, :class => 'img-responsive', id:"image-preview"
+  .col-sm-6
+    %label.no-padding
+      = f.check_box :active
+      %span.title-5.margin-left-5 Active
+
+:javascript
+  $(function(){
+    Attachment = {
+      UpdatePreview: function(obj){
+        if(!window.FileReader){
+        } else {
+          var reader = new FileReader();
+          var target = null;
+          reader.onload = function(e) {
+            target =  e.target || e.srcElement;
+            $("#image-preview").prop("src", target.result);
+          };
+          reader.readAsDataURL(obj.files[0]);
+        }
+      }
+    };
+  });

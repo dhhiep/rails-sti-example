@@ -1,0 +1,9 @@
+= content_for :right_nav_bar do
+  %li
+    = link_to "Back to #{@banner.class_name_display} List", [:admin, @banner.class]
+
+= form_for [:admin, @banner] do |f|
+  = render :partial => 'form', :locals => { :f => f }
+  .form-buttons.filter-actions.actions.text-right{"data-hook" => "buttons"}
+    = link_to "Cancel",  [:admin, @banner.class], :class => 'btn btn-sm btn-default'
+    = f.submit :update, :class => 'btn btn-sm btn-success'
